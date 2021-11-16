@@ -1,0 +1,4 @@
+iscsi_portal: "192.168.0.109"
+iscsi_target: "iqn.2000-01.com.synology:nas.servicepi.68fe5a5d6df"
+uuid_volumes: "a1949443-870c-4682-b8de-803159ce3961"
+uuid_backup: "2b8447ef-60f7-45a2-9886-d52ba865144a"

@@ -1,0 +1,23 @@
+- hosts: servicepi
+  become: true
+  pre_tasks:
+    - name: Load config.
+      ansible.builtin.include_vars: "{{ item }}"
+      loop:
+        - config.yml
+        - secrets.yml
+    - name: Update pacman cache.
+      community.general.pacman:
+        update_cache: true
+  handlers:
+    - name: Include handlers.
+      ansible.builtin.import_tasks: handlers.yml
+  tasks:
+    - name: Set up docker.
+      ansible.builtin.import_tasks: tasks/docker.yml
+    - name: Set up iscsi.
+      ansible.builtin.import_tasks: tasks/iscsi.yml
+    - name: Mount additional filesystems.
+      ansible.builtin.import_tasks: tasks/mount.yml
+    - name: Start containers.
+      ansible.builtin.import_tasks: tasks/containers.yml

@@ -1,0 +1,27 @@
+- name: Install open-iscsi.
+  community.general.pacman:
+    name: open-iscsi
+    state: present
+  notify: Restart iscsi.
+
+- name: Start iscsid.
+  ansible.builtin.systemd:
+    name: "{{ service }}"
+    state: started
+    enabled: yes
+  loop:
+    - iscsid.service
+    - iscsi.service
+  loop_control:
+    loop_var: service
+
+- name: Login to iscsi tartet.
+  community.general.open_iscsi:
+    portal: "{{ iscsi_portal }}"
+    target: "{{ iscsi_target }}"
+    auto_portal_startup: true
+    auto_node_startup: true
+  notify: Restart iscsi.
+
+- name: Flush handlers.
+  ansible.builtin.meta: flush_handlers

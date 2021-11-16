@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount /volumes
+
+[Mount]
+What=/dev/disk/by-uuid/{{ uuid_volumes }}
+Where=/volumes
+Type=btrfs
+Options=defaults,rw,noatime,space_cache,ssd,discard=async,subvol=@volumes
+
+[Install]
+WantedBy=multi-user.target

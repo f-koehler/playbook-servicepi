@@ -1,0 +1,27 @@
+- name: Generate mount files.
+  ansible.builtin.template:
+    src: "templates/{{ mount }}.mount.j2"
+    dest: "/etc/systemd/system/{{ mount }}.mount"
+    mode: 0644
+  loop:
+    - backup
+    - volumes
+    - var-lib-docker
+  loop_control:
+    loop_var: mount
+  notify: Remount filesystems.
+
+- name: Flush handlers.
+  ansible.builtin.meta: flush_handlers
+
+- name: Mount filesystems.
+  ansible.builtin.systemd:
+    name: "{{ mount }}.mount"
+    state: started
+    enabled: true
+  loop:
+    - volumes
+    - backup
+    - var-lib-docker
+  loop_control:
+    loop_var: mount
