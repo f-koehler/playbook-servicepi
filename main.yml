@@ -11,6 +11,8 @@
     - name: Include handlers.
       ansible.builtin.import_tasks: handlers.yml
   tasks:
+    - name: Setup AUR usage.
+      ansible.builtin.import_tasks: tasks/aur.yml
     - name: Set up docker.
       ansible.builtin.import_tasks: tasks/docker.yml
     - name: Set up iscsi.
@@ -19,3 +21,5 @@
       ansible.builtin.import_tasks: tasks/mount.yml
     - name: Start containers.
       ansible.builtin.import_tasks: tasks/containers.yml
+    - name: Setup backup strategy.
+      ansible.builtin.import_tasks: tasks/backup.yml

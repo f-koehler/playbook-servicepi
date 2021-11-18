@@ -1,0 +1,8 @@
+- name: Install btrbk.
+  kewlfft.aur.aur:
+    name:
+      - btrbk
+      - mbuffer
+    state: present
+  become: true
+  become_user: aur_builder
