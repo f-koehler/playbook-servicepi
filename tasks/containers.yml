@@ -6,6 +6,7 @@
     mode: "0700"
   loop:
     - nextcloud
+    - monica
   loop_control:
     loop_var: stack
 
@@ -16,6 +17,7 @@
     mode: "0600"
   loop:
     - nextcloud
+    - monica
   loop_control:
     loop_var: stack
 
@@ -25,5 +27,6 @@
     pull: true
   loop:
     - nextcloud
+    - monica
   loop_control:
     loop_var: stack

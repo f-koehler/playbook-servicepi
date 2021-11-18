@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  db:
+    image: "mariadb:10.7"
+    restart: "unless-stopped"
+    environment:
+      - MARIADB_ROOT_PASSWORD={{ monica_db_root_password }}
+      - MARIADB_DATABASE=monica
+      - MARIADB_USER=monica
+      - MARIADB_PASSWORD={{ monica_db_password }}
+    volumes:
+      - /volumes/monica/db:/var/lib/mysql
+      - "/etc/localtime:/etc/localtime:ro"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+  monica_app:
+    image: "monica:3"
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - APP_KEY={{ monica_app_key }}
+      - APP_TRUSTED_PROXIES=*
+      - APP_ENV=production
+      - DB_HOST=db
+      - DB_USERNAME=monica
+      - DB_PASSWORD={{ monica_db_password }}
+    ports:
+      - "8002:80"
+    volumes:
+      - /volumes/monica/app:/var/www/html/storage
+      - "/etc/localtime:/etc/localtime:ro"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "localhost:80"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
