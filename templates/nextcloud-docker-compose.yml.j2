@@ -4,10 +4,10 @@ services:
     image: "postgres:14"
     restart: unless-stopped
     volumes:
-      - "/volumes/nextcloud/db:/var/lib/postgresql/data:ro"
+      - "/volumes/nextcloud/db:/var/lib/postgresql/data"
       - "/etc/localtime:/etc/localtime:ro"
     environment:
-      - POSTGRES_PASSWORD="{{ nextcloud_db_password }}"
+      - POSTGRES_PASSWORD={{ nextcloud_db_password }}
       - POSTGRES_USER=nextcloud
       - POSTGRES_DB=nextcloud
     healthcheck:
@@ -33,14 +33,16 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "./healthchecks/nextcloud.sh:/healthcheck.sh:ro"
     environment:
-      - POSTGRES_PASSWORD="{{ nextcloud_db_password }}"
+      - POSTGRES_PASSWORD={{ nextcloud_db_password }}
       - POSTGRES_USER=nextcloud
       - POSTGRES_DB=nextcloud
       - POSTGRES_HOST=db
       - REDIS_HOST=cache
-      - NEXTCLOUD_ADMIN_USER="{{ nextcloud_admin_user }}"
-      - NEXTCLOUD_ADMIN_PASSWORD="{{ nextcloud_admin_password }}"
-      - NEXTCLOUD_TRUSTED_DOMAINS="{{ nextcloud_trusted_domains }}"
+      - NEXTCLOUD_ADMIN_USER={{ nextcloud_admin_user }}
+      - NEXTCLOUD_ADMIN_PASSWORD={{ nextcloud_admin_password }}
+      - NEXTCLOUD_TRUSTED_DOMAINS={{ nextcloud_trusted_domains }}
+    ports:
+      - "80:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "localhost:80"]
       interval: 10s

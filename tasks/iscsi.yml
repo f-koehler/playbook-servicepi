@@ -2,7 +2,14 @@
   community.general.pacman:
     name: open-iscsi
     state: present
-  notify: Restart iscsi.
+  notify: Restart iscsid.
+
+- name: Set iscsi initiator name.
+  ansible.builtin.template:
+    src: templates/initiatorname.iscsi.j2
+    dest: /etc/iscsi/initiatorname.iscsi
+    mode: "0644"
+  notify: Restart iscsid.
 
 - name: Start iscsid.
   ansible.builtin.systemd:
@@ -15,13 +22,22 @@
   loop_control:
     loop_var: service
 
-- name: Login to iscsi tartet.
-  community.general.open_iscsi:
-    portal: "{{ iscsi_portal }}"
-    target: "{{ iscsi_target }}"
-    auto_portal_startup: true
-    auto_node_startup: true
-  notify: Restart iscsi.
-
 - name: Flush handlers.
   ansible.builtin.meta: flush_handlers
+
+- name: Login to iscsi tartet.
+  block:
+    - name: Try to login to iscsi target.
+      community.general.open_iscsi:
+        portal: "{{ iscsi_portal }}"
+        target: "{{ iscsi_target }}"
+        auto_portal_startup: true
+        auto_node_startup: true
+  rescue:
+    - name: Try to discover target and then login.
+      community.general.open_iscsi:
+        portal: "{{ iscsi_portal }}"
+        target: "{{ iscsi_target }}"
+        discover: true
+        auto_portal_startup: true
+        auto_node_startup: true
