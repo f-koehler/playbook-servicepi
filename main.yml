@@ -1,11 +1,9 @@
 - hosts: servicepi
   become: true
+  vars_files:
+    - config.yml
+    - secrets.yml
   pre_tasks:
-    - name: Load config.
-      ansible.builtin.include_vars: "{{ item }}"
-      loop:
-        - config.yml
-        - secrets.yml
     - name: Update pacman cache.
       community.general.pacman:
         update_cache: true
