@@ -11,15 +11,19 @@
     - name: Include handlers.
       ansible.builtin.import_tasks: handlers.yml
   tasks:
-    - name: Setup AUR usage.
-      ansible.builtin.import_tasks: tasks/aur.yml
-    - name: Set up docker.
-      ansible.builtin.import_tasks: tasks/docker.yml
-    - name: Set up iscsi.
-      ansible.builtin.import_tasks: tasks/iscsi.yml
-    - name: Mount additional filesystems.
-      ansible.builtin.import_tasks: tasks/mount.yml
-    - name: Start containers.
-      ansible.builtin.import_tasks: tasks/containers.yml
-    - name: Setup backup strategy.
-      ansible.builtin.import_tasks: tasks/backup.yml
+    # - name: Setup AUR usage.
+    #   ansible.builtin.import_tasks: tasks/aur.yml
+    # - name: Set up docker.
+    #   ansible.builtin.import_tasks: tasks/docker.yml
+    # - name: Set up iscsi.
+    #   ansible.builtin.import_tasks: tasks/iscsi.yml
+    # - name: Mount additional filesystems.
+    #   ansible.builtin.import_tasks: tasks/mount.yml
+    - name: Start monica.
+      ansible.builtin.import_tasks: tasks/monica.yml
+    - name: Start nextcloud.
+      ansible.builtin.import_tasks: tasks/nextcloud.yml
+    - name: Start monitoring.
+      ansible.builtin.import_tasks: tasks/monitoring.yml
+    # - name: Setup backup strategy.
+    #   ansible.builtin.import_tasks: tasks/backup.yml

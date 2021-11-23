@@ -19,3 +19,8 @@
     - var-lib-docker
   loop_control:
     loop_var: mount
+
+- name: Restart monitoring.
+  community.docker.docker_compose:
+    project_src: "~/docker-compose/monitoring"
+    restarted: true

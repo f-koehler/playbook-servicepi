@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  prometheus:
+    image: "prom/prometheus:v2.31.1"
+    restart: "unless-stopped"
+    volumes:
+      - "/volumes/monitoring/prometheus/config:/etc/prometheus:ro"
+      - "/volumes/monitoring/prometheus/data:/prometheus:rw"
+      - "/etc/localtime:/etc/localtime:ro"
+  grafana:
+    image: "grafana/grafana:8.2.5"
+    volumes:
+      - "/volumes/monitoring/grafana/data:/var/lib/grafana:rw"
+      - "/volumes/monitoring/grafana/config:/etc/grafana:rw"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "3000:3000"
+  speedtest:
+    image: "miguelndecarvalho/speedtest-exporter:latest"
+    restart: "unless-stopped"

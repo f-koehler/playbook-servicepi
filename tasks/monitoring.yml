@@ -1,0 +1,26 @@
+- name: Create folder for docker-compose file.
+  ansible.builtin.file:
+    path: "~/docker-compose/monitoring"
+    state: directory
+    recurse: true
+    mode: "0700"
+
+- name: Generate docker-compose files.
+  ansible.builtin.template:
+    src: templates/monitoring/docker-compose.yml.j2
+    dest: ~/docker-compose/monitoring/docker-compose.yml
+    mode: "0600"
+
+- name: Start containers.
+  community.docker.docker_compose:
+    project_src: "~/docker-compose/monitoring"
+    pull: true
+
+- name: Generate prometheus config.
+  ansible.builtin.template:
+    src: "templates/monitoring/prometheus.yml.j2"
+    dest: "/volumes/monitoring/prometheus/config/prometheus.yml"
+    owner: "65534"
+    group: "65534"
+    mode: "0600"
+  notify: Restart monitoring.
