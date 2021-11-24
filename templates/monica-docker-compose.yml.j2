@@ -17,7 +17,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-  monica_app:
+  app:
     image: "monica:3"
     restart: unless-stopped
     depends_on:
@@ -26,7 +26,8 @@ services:
     environment:
       - APP_KEY={{ monica_app_key }}
       - APP_TRUSTED_PROXIES=*
-      - APP_ENV=production
+      - APP_URL={{ monica_app_url }}
+      - APP_ENV=local
       - DB_HOST=db
       - DB_USERNAME=monica
       - DB_PASSWORD={{ monica_db_password }}
