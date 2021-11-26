@@ -5,16 +5,39 @@
     recurse: true
     mode: "0700"
 
+- name: Create directories for prometheus.
+  ansible.builtin.file:
+    path: "/volumes/monitoring/{{ directory }}"
+    state: directory
+    mode: "0700"
+    owner: "65534"
+    group: "65534"
+  loop:
+    - prometheus
+    - prometheus/config
+    - prometheus/data
+  loop_control:
+    loop_var: directory
+
+- name: Create directories for grafana.
+  ansible.builtin.file:
+    path: "/volumes/monitoring/{{ directory }}"
+    state: directory
+    mode: "0700"
+    owner: "472"
+    group: "0"
+  loop:
+    - grafana
+    - grafana/data
+    - grafana/config
+  loop_control:
+    loop_var: directory
+
 - name: Generate docker-compose files.
   ansible.builtin.template:
     src: templates/monitoring/docker-compose.yml.j2
     dest: ~/docker-compose/monitoring/docker-compose.yml
     mode: "0600"
-
-- name: Start containers.
-  community.docker.docker_compose:
-    project_src: "~/docker-compose/monitoring"
-    pull: true
 
 - name: Generate prometheus config.
   ansible.builtin.template:
@@ -24,3 +47,17 @@
     group: "65534"
     mode: "0600"
   notify: Restart monitoring.
+
+- name: Generate grafana config.
+  ansible.builtin.template:
+    src: "templates/monitoring/grafana.ini.j2"
+    dest: "/volumes/monitoring/grafana/config/grafana.ini"
+    owner: "472"
+    group: "0"
+    mode: "0600"
+  notify: Restart monitoring.
+
+- name: Start containers.
+  community.docker.docker_compose:
+    project_src: "~/docker-compose/monitoring"
+    pull: true
