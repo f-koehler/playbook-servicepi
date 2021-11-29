@@ -5,8 +5,25 @@ global:
 
 scrape_configs:
   - job_name: "speedtest"
-    metrics_path: /metrics
-    scrape_interval: 30m
-    scrape_timeout: 60s
+    scrape_interval: {{ speedtest_interval }}
+    scrape_timeout: {{ speedtest_timeout }}
     static_configs:
       - targets: ["speedtest:9798"]
+  - job_name: "blackbox"
+    scrape_interval: {{ blackbox_interval }}
+    scrape_timeout: {{ blackbox_timeout }}
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - https://google.de
+        - https://github.com
+        - https://fkoehler.xyz
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115

@@ -3,10 +3,10 @@
   vars_files:
     - config.yml
     - secrets.yml
-  pre_tasks:
-    - name: Update pacman cache.
-      community.general.pacman:
-        update_cache: true
+  # pre_tasks:
+  #   - name: Update pacman cache.
+  #     community.general.pacman:
+  #       update_cache: true
   handlers:
     - name: Include handlers.
       ansible.builtin.import_tasks: handlers.yml
@@ -19,10 +19,10 @@
     #   ansible.builtin.import_tasks: tasks/iscsi.yml
     # - name: Mount additional filesystems.
     #   ansible.builtin.import_tasks: tasks/mount.yml
-    - name: Start monica.
-      ansible.builtin.import_tasks: tasks/monica.yml
-    - name: Start nextcloud.
-      ansible.builtin.import_tasks: tasks/nextcloud.yml
+    # - name: Start monica.
+    #   ansible.builtin.import_tasks: tasks/monica.yml
+    # - name: Start nextcloud.
+    #   ansible.builtin.import_tasks: tasks/nextcloud.yml
     - name: Start monitoring.
       ansible.builtin.import_tasks: tasks/monitoring.yml
     # - name: Setup backup strategy.
