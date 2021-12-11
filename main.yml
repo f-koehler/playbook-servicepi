@@ -23,9 +23,9 @@
     #   ansible.builtin.import_tasks: tasks/monica.yml
     # - name: Start nextcloud.
     #   ansible.builtin.import_tasks: tasks/nextcloud.yml
-    - name: Start pihole.
-      ansible.builtin.import_tasks: tasks/pihole.yml
+    # - name: Start pihole.
+    #   ansible.builtin.import_tasks: tasks/pihole.yml
     # - name: Start monitoring.
     #   ansible.builtin.import_tasks: tasks/monitoring.yml
-    # - name: Setup backup strategy.
-    #   ansible.builtin.import_tasks: tasks/backup.yml
+    - name: Setup backup strategy.
+      ansible.builtin.import_tasks: tasks/backup.yml
